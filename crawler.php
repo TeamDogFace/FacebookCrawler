@@ -1,8 +1,8 @@
 <?php
 require  'facebook-php-sdk/src/facebook.php';
-$facebook = new Facebook(array('appId' => '521884561263250', 'secret' => 'cc95d1118d819cc351c4d8319efe301b'	     
+$facebook = new Facebook(array('appId' => 'YOUR_APP_ID', 'secret' => 'YOUR_SECRET'	     
 //https://graph.facebook.com/oauth/access_token?client_id=YOUR_APP_ID&client_secret=YOUR_APP_SECRET&grant_type=client_credentials
-//access_token=521884561263250|Mzw_1EMnUoQYg-RODsDnxD1mzOo	
+	
 ));
 ?>
 <!DOCTYPE  html>
@@ -150,9 +150,9 @@ $facebook = new Facebook(array('appId' => '521884561263250', 'secret' => 'cc95d1
 			//}
 			//}    
 			//}
-			$user = 'a2898_dave';
-			$pass = '0mgitsomg';
-			$dog_db = new PDO('mysql:host=localhost;dbname=a2898_dog_face', $user, $pass);
+			$user = 'test_db';
+			$pass = 'password';
+			$dog_db = new PDO('mysql:host=localhost;dbname=test_db', $user, $pass);
 			$sql_dogs = "INSERT INTO dogs (listingURL, dateAdded) values (:listingURL, :dateAdded)";
 			$sql_photos = "INSERT INTO photos (filename, path, dogID) values (:filename, :path, :dogID)";
 			
