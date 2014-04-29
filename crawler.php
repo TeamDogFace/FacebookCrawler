@@ -134,7 +134,44 @@ try{
 	//set errormode
 	$cache_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
-	//still need to create a working cache database
+	//create tables
+	$cache_db->exec("CREATE TABLE IF NOT EXISTS dogs(
+		dogID		int unsigned not null auto_increment,
+		listingURL	varchar(255) not null,
+		dateAdded	date not null),
+		primary key (dogID)
+		");
+		
+	$cache_db->exec("CREATE TABLE IF NOT EXISTS photos(
+		photoID		int unsigned not null auto_increment,
+		filename	varchar(255) not null,
+		path		varchar(255) not null,
+		dogID		int unsigned not null,
+		primary key (photoID),
+		foreign key (dogID) references dogs(dogID)
+		)");
+		
+	//insert data into cache db
+	$sql_dogs = "INSERT INTO dogs (listingURL, dateAdded) values (:listingURL, :dateAdded)";
+	$sql_photos = "INSERT INTO photos (filename, path, dogID) values (:filename, :path, :dogID)";
+	
+	foreach($dog_array as $fb_site){
+		foreach($fb_site as $dog){
+			//prepare sql insert statements
+			$query = $cache_db->prepare($sql_dogs);
+			$query->bindParam(':listingURL', $dog['listingURL']);
+			$query->bindParam(':dateAdded', $dog['dateAdded']);
+			$query->execute();
+			
+			$dog_id = $cache_db->lastInsertId();
+			
+			$query = $cache_db->prepare($sql_photos);
+			$query->bindParam(':filename', $dog['filename']);
+			$query->bindParam(':path', $dog['path']);
+			$query->bindParam(':dogID', $dog_id);
+			$query->execute();
+		}
+	}
 	
 	// close database connections
 	$fb_db = null;
