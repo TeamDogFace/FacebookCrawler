@@ -1,6 +1,13 @@
 FacebookCrawler
 ===============
 
-Component that uses the facebook API to retrieve photos from facebook pages
+####About
+This script works with the HereDoggie application. It's used for "crawling" Facebook and downloading images from various Facebook pages.
 
-Requires the PHP Facebook SDK. Just paste the SDK folder at the same level as crawler.php.
+####Dependencies 
+- _PHP5_
+- _PHP Facebook SDK_ Just paste the SDK folder at the same level as crawler.php
+- _cURL_
+- _PDO_ required drivers include:
+  - sqlite3
+  - MySQL
