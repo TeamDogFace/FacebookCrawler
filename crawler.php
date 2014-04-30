@@ -13,7 +13,7 @@ else{
 
 try{
 	//get the web app database
-	$fb_db = new PDO('mysql:host=localhost;dbname=dbname', 'dbname', 'pw');
+	$fb_db = new PDO('mysql:host=localhost;dbname=dbname', 'usrname', 'pw');
 	$fb_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$urls = $fb_db->query('SELECT * FROM facebook_urls');
 	$searches = $fb_db->query('SELECT date_lost FROM searches');
@@ -30,10 +30,10 @@ try{
 		
 	}
 	
-	//not sure if this is needed
+	//this finds the most recent search ID and saves it as a variable used later inside the images folder
 	foreach($search_ids as $s_id){
 		$search_id = $s_id['id'];
-		echo $search_id . PHP_EOL;
+		//echo $search_id . PHP_EOL;
 	}
 	
 	$dog_array = array();
@@ -100,33 +100,6 @@ try{
 		$dog_array[$fb_url] = $temp_array;
 	}
 	
-	/* For putting photos in dog db
-	$user = 'test_db';
-	$pass = 'password';
-	$dog_db = new PDO('mysql:host=localhost;dbname='.$user , $user, $pass);
-	$dog_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$sql_dogs = "INSERT INTO dogs (listingURL, dateAdded) values (:listingURL, :dateAdded)";
-	$sql_photos = "INSERT INTO photos (filename, path, dogID) values (:filename, :path, :dogID)";
-	
-	foreach($dog_array as $fb_site){
-		foreach($fb_site as $dog){
-			//prepare sql insert statements
-			$query = $dog_db->prepare($sql_dogs);
-			$query->bindParam(':listingURL', $dog['listingURL']);
-			$query->bindParam(':dateAdded', $dog['dateAdded']);
-			$query->execute();
-			
-			$dog_id = $dog_db->lastInsertId();
-			
-			$query = $dog_db->prepare($sql_photos);
-			$query->bindParam(':filename', $dog['filename']);
-			$query->bindParam(':path', $dog['path']);
-			$query->bindParam(':dogID', $dog_id);
-			$query->execute();
-		}
-	}
-	*/
-	
 	// For putting photos in cache db
 	//Create cache db
 	$cache_db = new PDO('sqlite:cache.sqlite3');
@@ -136,18 +109,16 @@ try{
 	
 	//create tables
 	$cache_db->exec("CREATE TABLE IF NOT EXISTS dogs(
-		dogID		int unsigned not null auto_increment,
+		dogID		int primary key not null,
 		listingURL	varchar(255) not null,
-		dateAdded	date not null),
-		primary key (dogID)
-		");
+		dateAdded	date not null
+		)");
 		
 	$cache_db->exec("CREATE TABLE IF NOT EXISTS photos(
-		photoID		int unsigned not null auto_increment,
+		photoID		int primary key not null,
 		filename	varchar(255) not null,
 		path		varchar(255) not null,
-		dogID		int unsigned not null,
-		primary key (photoID),
+		dogID		int not null,
 		foreign key (dogID) references dogs(dogID)
 		)");
 		
