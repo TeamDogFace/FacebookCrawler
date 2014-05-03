@@ -35,8 +35,6 @@ try{
 		$search_id = $s_id['id'];
 	}
 
-	//remove me!!
-	$search_id = 22;
 	//get date lost
 	$searches = $fb_db->query('SELECT date_lost FROM searches WHERE id='.$search_id);
 	foreach($searches as $search){
